@@ -1,52 +1,195 @@
-# Java Result Set Processing Fundamentals
+# Data Backend Compare
 
 ## Overview
 
-This project is designed as a learning tool for understanding the fundamentals of result set processing in Java. It uses a generic entity template to demonstrate how data can be retrieved from and manipulated in a database, focusing on how result sets are handled in Java applications. The entity structure is intentionally flexible to allow for the creation of more complex entities as needed to highlight different processing patterns.
+This project demonstrates and compares different data access approaches in Java Spring Boot applications. It provides a comprehensive comparison between **JDBC** and **JPA** implementations, with full CRUD operations, custom queries, and comprehensive test coverage.
 
-## Learning Objectives
+## Features
 
-- Understand how to map Java objects to database tables.
-- Learn how to retrieve, process, and manipulate result sets from a database.
-- Explore and compare three major approaches for result set processing in Java:
-  - **JPA (Jakarta Persistence API)**
-  - **jOOQ**
-  - **JDBC**
+- **Multi-module Maven project** with clear separation of concerns
+- **JDBC Implementation** with custom repository pattern
+- **JPA Implementation** with Spring Data JPA repositories
+- **Comprehensive Test Suite** with 6/6 tests passing ✅
+- **H2 In-Memory Database** for testing
+- **Spring Boot 3.2.0** with modern Java 17
+- **Conditional Bean Creation** with property-based configuration
+- **Advanced Query Methods** with case-insensitive search support
 
-## Key Components
+## Project Structure
 
-- **Generic Entity:**  
-  A flexible Java class template (e.g., `ExampleEntity`) that can be extended or modified to create more complex entities for demonstrating various result set processing patterns.e complex entities for demonstrating various result set processing patterns.
-- **Multiple Data Access Approaches:**  
-  The project will demonstrate how to work with result sets using JPA, jOOQ, and JDBC, allowing for a comparative understanding of each method.
-- **Lombok:**  
-  Reduces boilerplate code by generating getters, setters, and constructors.
+The project is organized into four main modules:
 
-## Example: Generic Entityyy
+- **common** - Shared entities and utilities
+- **jdbc-module** - JDBC implementation with custom repositories
+- **jpa-module** - JPA implementation with Spring Data repositories
+- **main-module** - Main application with comprehensive tests
 
-```java
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ExampleEntity {ntity {ntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String field1;
-    private String field2;
-    private Integer field3;
-    // TODO: Add more fields and relationships as needed to highlight processing patternslds and relationships as needed to highlight processing patternslds and relationships as needed to highlight processing patterns
-}
+The main application includes:
+- Data models with BaseEntity and EnhancedEntity
+- Repository implementations for both JDBC and JPA
+- Utility classes for test data generation
+- Comprehensive test suite covering all CRUD operations
+
+## Data Models
+
+### BaseEntity
+A simple entity with basic fields designed for JDBC comparison. It includes standard fields like id, field1, field2, and field3 to demonstrate basic CRUD operations.
+
+### EnhancedEntity
+A complex entity with advanced features for JPA comparison. It includes comprehensive fields like name, email, description, priority, status flags, categories, external IDs, and timestamp tracking for created and updated dates.
+
+## Data Access Implementations
+
+### JDBC Implementation
+- **Custom Repository Pattern** with manual SQL queries
+- **RowMapper** for object mapping
+- **GeneratedKeyHolder** for proper ID handling
+- **Conditional Bean Creation** with property-based configuration
+- **Transaction Management** with proper rollback handling
+
+### JPA Implementation
+- **Spring Data JPA** repositories
+- **Custom Query Methods** with method name conventions
+- **@Query Annotations** for complex queries
+- **Case-insensitive Search** with proper HQL functions
+- **Advanced Query Methods** with aggregation support
+
+## Getting Started
+
+### Prerequisites
+- Java 17 or higher
+- Maven 3.6+
+- Git
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/devcamos/data-backend-compare.git
+   cd data-backend-compare
+   ```
+
+2. **Build the project:**
+   ```bash
+   mvn clean install
+   ```
+
+3. **Run tests:**
+   ```bash
+   mvn test -pl main-module
+   ```
+
+4. **Run the application:**
+   ```bash
+   mvn spring-boot:run -pl main-module
+   ```
+
+## Configuration
+
+The application uses H2 in-memory database for testing. Configuration can be found in:
+- `main-module/src/main/resources/application.properties`
+- `main-module/src/main/resources/schema.sql`
+
+### Key Properties
+- **Database Configuration** - H2 in-memory database with automatic schema generation
+- **JPA Settings** - Hibernate with SQL logging enabled
+- **Server Configuration** - Running on port 8081
+- **Feature Toggles** - Enable/disable JDBC and JPA implementations
+
+## Testing
+
+The project includes comprehensive tests covering:
+
+- ✅ **JDBC CRUD Operations** - Create, Read, Update, Delete
+- ✅ **JPA CRUD Operations** - Full entity lifecycle management
+- ✅ **Custom Queries** - Complex search and filtering
+- ✅ **Repository Injection** - Proper Spring context loading
+- ✅ **Model Validation** - Getter/setter functionality
+- ✅ **Application Context** - Spring Boot startup
+
+### Test Results
+```
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
 ```
 
-## How to Use
+### Running Tests
+```bash
+# Run all tests
+mvn test -pl main-module
 
-1. Clone this repository.
-2. Set up your Java development environment (e.g., with Maven or Gradle).
-3. Configure your database connection.
-4. Run the application and experiment with result set processing using the `Person` entity.
+# Run specific test class
+mvn test -pl main-module -Dtest=CrudOperationsTest
 
-## Purpose
+# Run with detailed output
+mvn test -pl main-module -Dtest=CrudOperationsTest -X
+```
 
-This project is intended for educational purposes, helping you build a strong foundation in result set processing and data handling in Java.
+## Key Features Demonstrated
+
+### JDBC Features
+- Manual SQL query construction
+- Result set mapping with RowMapper
+- Transaction management
+- Generated key retrieval
+- Custom repository pattern
+- Conditional bean creation
+
+### JPA Features
+- Automatic query generation
+- Method name conventions
+- Custom @Query annotations
+- Entity lifecycle management
+- Advanced query methods
+- Case-insensitive search
+
+### Spring Boot Features
+- Multi-module Maven project
+- Conditional bean creation
+- Property-based configuration
+- Comprehensive test support
+- H2 in-memory database
+- Spring Boot 3.2.0 with Java 17
+
+## Recent Updates
+
+- ✅ **All tests passing** - 6/6 tests successful
+- ✅ **Enhanced JDBC repositories** - Proper ID generation and return
+- ✅ **Fixed JPA queries** - Case-insensitive search support
+- ✅ **Updated dependencies** - Spring Boot 3.2.0 with modern Java
+- ✅ **Comprehensive documentation** - Updated README with current features
+- ✅ **Improved test coverage** - Enhanced CRUD operations testing
+- ✅ **Better error handling** - Proper transaction management
+
+## Performance Considerations
+
+### JDBC Advantages
+- **Direct SQL control** - Fine-grained query optimization
+- **Minimal overhead** - No ORM layer
+- **Memory efficient** - Direct result set mapping
+- **Predictable performance** - Explicit query execution
+
+### JPA Advantages
+- **Rapid development** - Automatic query generation
+- **Type safety** - Compile-time query validation
+- **Database agnostic** - Hibernate dialect support
+- **Advanced features** - Caching, lazy loading, etc.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is intended for educational purposes and learning data access patterns in Java Spring Boot applications.
+
+## Repository
+
+- **GitHub:** https://github.com/devcamos/data-backend-compare
+- **Branch:** `main` (primary development branch)
+- **Status:** All tests passing ✅
+- **Last Updated:** August 2024
