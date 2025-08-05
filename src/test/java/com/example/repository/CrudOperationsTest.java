@@ -1,15 +1,16 @@
 package com.example.repository;
 
 import com.example.model.BaseEntity;
-import com.example.model.Person;
+import com.example.model.EnhancedEntity;
 import com.example.repository.jdbc.JdbcExampleEntityRepository;
-import com.example.repository.jdbc.JdbcPersonRepository;
-import com.example.repository.jpa.JpaPersonRepository;
+import com.example.repository.jdbc.JdbcEnhancedEntityRepository;
+import com.example.repository.jpa.JpaEnhancedEntityRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,15 +27,15 @@ class CrudOperationsTest {
     private JdbcExampleEntityRepository jdbcExampleRepository;
     
     @Autowired(required = false)
-    private JdbcPersonRepository jdbcPersonRepository;
+    private JdbcEnhancedEntityRepository jdbcEnhancedRepository;
     
     @Autowired(required = false)
-    private JpaPersonRepository jpaPersonRepository;
+    private JpaEnhancedEntityRepository jpaEnhancedRepository;
     
     @Test
     void testJdbcBaseEntityCrud() {
         if (jdbcExampleRepository == null) {
-            System.out.println("JDBC repository not enabled, skipping test");
+            System.out.println("JDBC BaseEntity repository not enabled, skipping test");
             return;
         }
         
@@ -66,109 +67,137 @@ class CrudOperationsTest {
     }
     
     @Test
-    void testJdbcPersonCrud() {
-        if (jdbcPersonRepository == null) {
-            System.out.println("JDBC Person repository not enabled, skipping test");
+    void testJdbcEnhancedEntityCrud() {
+        if (jdbcEnhancedRepository == null) {
+            System.out.println("JDBC EnhancedEntity repository not enabled, skipping test");
             return;
         }
         
         // Create
-        Person person = Person.builder()
-            .name("John Doe")
-            .email("john.doe@example.com")
-            .age(30)
-            .department("Engineering")
+        EnhancedEntity entity = EnhancedEntity.builder()
+            .name("Test Enhanced Entity")
+            .email("test@example.com")
+            .description("Test description")
+            .priority(5)
+            .isActive(true)
+            .category("Technology")
+            .externalId("EXT-001")
             .build();
         
-        Person saved = jdbcPersonRepository.save(person);
+        EnhancedEntity saved = jdbcEnhancedRepository.save(entity);
         assertNotNull(saved);
         assertNotNull(saved.getId());
+        assertNotNull(saved.getCreatedAt());
+        assertNotNull(saved.getUpdatedAt());
         
         // Read
-        Optional<Person> found = jdbcPersonRepository.findById(saved.getId());
+        Optional<EnhancedEntity> found = jdbcEnhancedRepository.findById(saved.getId());
         assertTrue(found.isPresent());
-        assertEquals("John Doe", found.get().getName());
+        assertEquals("Test Enhanced Entity", found.get().getName());
         
         // Test custom queries
-        List<Person> byName = jdbcPersonRepository.findByName("John");
+        List<EnhancedEntity> byName = jdbcEnhancedRepository.findByName("Test");
         assertFalse(byName.isEmpty());
         
-        List<Person> byDepartment = jdbcPersonRepository.findByDepartment("Engineering");
-        assertFalse(byDepartment.isEmpty());
+        List<EnhancedEntity> byCategory = jdbcEnhancedRepository.findByCategory("Technology");
+        assertFalse(byCategory.isEmpty());
+        
+        List<EnhancedEntity> activeEntities = jdbcEnhancedRepository.findByIsActive(true);
+        assertFalse(activeEntities.isEmpty());
         
         // Update
-        saved.setAge(31);
-        Person updated = jdbcPersonRepository.save(saved);
-        assertEquals(31, updated.getAge());
+        saved.setPriority(8);
+        EnhancedEntity updated = jdbcEnhancedRepository.save(saved);
+        assertEquals(8, updated.getPriority());
         
         // Test count and exists
-        assertTrue(jdbcPersonRepository.existsById(saved.getId()));
-        assertTrue(jdbcPersonRepository.count() > 0);
+        assertTrue(jdbcEnhancedRepository.existsById(saved.getId()));
+        assertTrue(jdbcEnhancedRepository.count() > 0);
         
         // Delete
-        jdbcPersonRepository.deleteById(saved.getId());
-        Optional<Person> deleted = jdbcPersonRepository.findById(saved.getId());
+        jdbcEnhancedRepository.deleteById(saved.getId());
+        Optional<EnhancedEntity> deleted = jdbcEnhancedRepository.findById(saved.getId());
         assertFalse(deleted.isPresent());
     }
     
     @Test
-    void testJpaPersonCrud() {
-        if (jpaPersonRepository == null) {
-            System.out.println("JPA repository not enabled, skipping test");
+    void testJpaEnhancedEntityCrud() {
+        if (jpaEnhancedRepository == null) {
+            System.out.println("JPA EnhancedEntity repository not enabled, skipping test");
             return;
         }
         
-        // Create multiple persons
-        Person person1 = Person.builder()
+        // Create multiple entities
+        EnhancedEntity entity1 = EnhancedEntity.builder()
             .name("Alice Johnson")
             .email("alice.johnson@example.com")
-            .age(25)
-            .department("Marketing")
+            .description("High priority task")
+            .priority(9)
+            .isActive(true)
+            .category("Technology")
+            .externalId("EXT-001")
             .build();
         
-        Person person2 = Person.builder()
+        EnhancedEntity entity2 = EnhancedEntity.builder()
             .name("Bob Smith")
             .email("bob.smith@example.com")
-            .age(35)
-            .department("Engineering")
+            .description("Standard operation")
+            .priority(5)
+            .isActive(true)
+            .category("Finance")
+            .externalId("EXT-002")
             .build();
         
-        Person person3 = Person.builder()
+        EnhancedEntity entity3 = EnhancedEntity.builder()
             .name("Carol Davis")
             .email("carol.davis@example.com")
-            .age(28)
-            .department("Marketing")
+            .description("Critical system")
+            .priority(7)
+            .isActive(false)
+            .category("Technology")
+            .externalId("EXT-003")
             .build();
         
-        jpaPersonRepository.save(person1);
-        jpaPersonRepository.save(person2);
-        jpaPersonRepository.save(person3);
+        jpaEnhancedRepository.save(entity1);
+        jpaEnhancedRepository.save(entity2);
+        jpaEnhancedRepository.save(entity3);
         
         // Test custom query methods
-        List<Person> byName = jpaPersonRepository.findByNameContainingIgnoreCase("alice");
+        List<EnhancedEntity> byName = jpaEnhancedRepository.findByNameContainingIgnoreCase("alice");
         assertFalse(byName.isEmpty());
         
-        List<Person> byDepartment = jpaPersonRepository.findByDepartment("Marketing");
-        assertEquals(2, byDepartment.size());
+        List<EnhancedEntity> byCategory = jpaEnhancedRepository.findByCategory("Technology");
+        assertEquals(2, byCategory.size());
         
-        List<Person> byAgeRange = jpaPersonRepository.findByAgeBetween(25, 30);
-        assertEquals(2, byAgeRange.size());
+        List<EnhancedEntity> byPriority = jpaEnhancedRepository.findByPriorityGreaterThan(5);
+        assertEquals(2, byPriority.size());
         
-        List<Person> byDepartmentAndAge = jpaPersonRepository.findByDepartmentAndAgeGreaterThan("Engineering", 30);
-        assertEquals(1, byDepartmentAndAge.size());
+        List<EnhancedEntity> activeByCategory = jpaEnhancedRepository.findByCategoryAndIsActive("Technology", true);
+        assertEquals(1, activeByCategory.size());
         
-        List<Person> byEmail = jpaPersonRepository.findByEmailContaining("example.com");
-        assertEquals(3, byEmail.size());
+        List<EnhancedEntity> byPriorityRange = jpaEnhancedRepository.findByPriorityBetween(5, 8);
+        assertEquals(2, byPriorityRange.size());
+        
+        // Test custom queries
+        List<EnhancedEntity> activeByName = jpaEnhancedRepository.findActiveByNameContaining("alice");
+        assertEquals(1, activeByName.size());
+        
+        List<EnhancedEntity> byCategoryAndPriority = jpaEnhancedRepository.findByCategoryAndPriorityGreaterThanEqual("Technology", 8);
+        assertEquals(1, byCategoryAndPriority.size());
         
         // Test aggregation queries
-        long marketingCount = jpaPersonRepository.countByDepartment("Marketing");
-        assertEquals(2, marketingCount);
+        long techCount = jpaEnhancedRepository.countByCategory("Technology");
+        assertEquals(2, techCount);
         
-        Double avgAge = jpaPersonRepository.getAverageAgeByDepartment("Marketing");
-        assertNotNull(avgAge);
-        assertEquals(26.5, avgAge, 0.1);
+        Double avgPriority = jpaEnhancedRepository.getAveragePriorityByCategory("Technology");
+        assertNotNull(avgPriority);
+        assertEquals(8.0, avgPriority, 0.1);
+        
+        // Test external ID lookup
+        Optional<EnhancedEntity> byExternalId = jpaEnhancedRepository.findByExternalId("EXT-001");
+        assertTrue(byExternalId.isPresent());
         
         // Clean up
-        jpaPersonRepository.deleteAll();
+        jpaEnhancedRepository.deleteAll();
     }
 } 
