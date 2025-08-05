@@ -15,7 +15,6 @@ import java.util.Optional;
 @ConditionalOnProperty(name = "data-access.jpa.enabled", havingValue = "true")
 public interface JpaEnhancedEntityRepository extends JpaRepository<EnhancedEntity, Long> {
     
-    // Basic query methods
     List<EnhancedEntity> findByNameContainingIgnoreCase(String name);
     
     Optional<EnhancedEntity> findByEmail(String email);
@@ -26,7 +25,6 @@ public interface JpaEnhancedEntityRepository extends JpaRepository<EnhancedEntit
     
     List<EnhancedEntity> findByPriorityGreaterThan(Integer priority);
     
-    // Combined query methods
     List<EnhancedEntity> findByCategoryAndIsActive(String category, Boolean isActive);
     
     List<EnhancedEntity> findByPriorityBetween(Integer minPriority, Integer maxPriority);
@@ -35,7 +33,6 @@ public interface JpaEnhancedEntityRepository extends JpaRepository<EnhancedEntit
     
     List<EnhancedEntity> findByUpdatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
     
-    // Custom queries
     @Query("SELECT e FROM EnhancedEntity e WHERE e.name LIKE %:name% AND e.isActive = true")
     List<EnhancedEntity> findActiveByNameContaining(@Param("name") String name);
     

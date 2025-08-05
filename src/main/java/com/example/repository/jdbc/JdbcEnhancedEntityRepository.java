@@ -81,7 +81,6 @@ public class JdbcEnhancedEntityRepository {
         LocalDateTime now = LocalDateTime.now();
         
         if (entity.getId() == null) {
-            // Insert
             entity.setCreatedAt(now);
             entity.setUpdatedAt(now);
             
@@ -92,7 +91,6 @@ public class JdbcEnhancedEntityRepository {
                 entity.getPriority(), entity.getIsActive(), entity.getCategory(), entity.getExternalId()
             );
         } else {
-            // Update
             entity.setUpdatedAt(now);
             
             jdbcTemplate.update(

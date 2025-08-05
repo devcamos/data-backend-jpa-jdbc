@@ -8,11 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * ExampleEntity is a generic entity template.
- * Extend or modify this class to create more complex entities
- * for demonstrating various result set processing patterns.
- */
 @Entity
 @Data
 @NoArgsConstructor
@@ -23,10 +18,7 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Example generic fields
     private String field1;
     private String field2;
     private Integer field3;
-
-    // TODO: Add more fields and relationships as needed to highlight processing patterns
 }
