@@ -1,18 +1,20 @@
 package com.example.repository.jdbc;
 
-import com.example.model.Person;
+import com.example.model.BaseEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @JdbcTest
-@Import(JdbcPersonRepository.class)
-class JdbcPersonRepositoryTest {
+@Import(JdbcExampleEntityRepository.class)
+class JdbcExampleEntityRepositoryTest {
     @Autowired
-    private JdbcPersonRepository repository;
+    private JdbcExampleEntityRepository repository;
 
     @Test
     void testRepositoryNotNull() {
