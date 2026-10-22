@@ -1,9 +1,0 @@
-com/example/repository/jdbc/JdbcEnhancedEntityRepository.class
-com/example/repository/jpa/JpaEnhancedEntityRepository.class
-com/example/repository/jdbc/JdbcExampleEntityRepository.class
-com/example/model/BaseEntity$BaseEntityBuilder.class
-com/example/DataBackendCompareApplication.class
-com/example/model/BaseEntity.class
-com/example/model/EnhancedEntity.class
-com/example/model/EnhancedEntity$EnhancedEntityBuilder.class
-com/example/util/TestDataGenerator.class
